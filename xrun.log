@@ -1,0 +1,43 @@
+xrun: 19.09-s003: (c) Copyright 1995-2019 Cadence Design Systems, Inc.
+TOOL:	xrun	19.09-s003: Started on Oct 13, 2022 at 16:29:49 CEST
+xrun
+	+elaborate
+	+sv
+	-f /home/student/pmajtas/VDIC/.dvt/lab00.build
+		-F lab00/tb/tb.f
+			-F lab00/tb/../../rtl/rtl.f
+				-v93
+				single_cycle_add_and_xor.vhd
+				three_cycle_mult.vhd
+				tinyalu.vhd
+			tinyalu_tb.sv
+Recompiling... reason: file './rtl/single_cycle_add_and_xor.vhd' is newer than expected.
+	expected: Thu Oct 13 15:21:00 2022
+	actual:   Thu Oct 13 16:29:43 2022
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		top
+xmelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+	Building instance overlay tables: .................... Done
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		              Instances  Unique
+	VHDL Design hierarchy:
+		Components:           3       3
+		Processes:            9       9
+		Signals:             16      16
+	Verilog Design hierarchy:
+		Modules:              1       1
+		Registers:           18      18
+		Scalar wires:         3       -
+		Expanded wires:      19       3
+		Initial blocks:       3       3
+		Final blocks:         1       1
+		Cont. assignments:    0       1
+		Pseudo assignments:   3       3
+		Assertions:           1       1
+	Writing initial simulation snapshot: worklib.top:sv
+TOOL:	xrun	19.09-s003: Exiting on Oct 13, 2022 at 16:29:49 CEST  (total: 00:00:00)

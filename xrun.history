@@ -1,0 +1,6 @@
+s1(13Oct2022:16:24:02):  xrun +compile +sv -f /home/student/pmajtas/VDIC/.dvt/lab00.build 
+s2(13Oct2022:16:25:44):  xrun +compile +sv -f /home/student/pmajtas/VDIC/.dvt/lab00.build 
+s3(13Oct2022:16:27:38):  xrun +compile +sv -f /home/student/pmajtas/VDIC/.dvt/lab00.build 
+s4(13Oct2022:16:29:24):  xrun +elaborate +sv -f /home/student/pmajtas/VDIC/.dvt/lab00.build 
+s5(13Oct2022:16:29:38):  xrun +elaborate +sv -f /home/student/pmajtas/VDIC/.dvt/lab00.build 
+s6(13Oct2022:16:29:49):  xrun +elaborate +sv -f /home/student/pmajtas/VDIC/.dvt/lab00.build 

@@ -1,0 +1,3 @@
+s1(13Oct2022:15:34:28):  xrun -F ../tb/tb.f 
+s2(13Oct2022:15:36:24):  xrun -F ../tb/tb.f -v93 
+s3(13Oct2022:15:41:21):  xrun -F ../tb/tb.f -v93 -clean 
