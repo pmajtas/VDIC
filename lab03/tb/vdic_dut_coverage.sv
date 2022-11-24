@@ -2,7 +2,8 @@
 module vdic_dut_coverage(vdic_dut_bfm bfm);
 import vdic_dut_pkg::*;
 	
-bit [7:0] data_i [7:0], size;
+bit [7:0] data_i [7:0];
+bit [3:0] size;
 command_t cmd;
 state_t STATE;
 

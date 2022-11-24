@@ -11,7 +11,8 @@ import vdic_dut_pkg::*;
 
 
 
-bit [7:0] data_i [7:0], size;
+bit [7:0] data_i [7:0];
+bit [3:0] size;
 command_t cmd;
 bit[1:0] reset;
 //------------------------------------------------------------------------------
@@ -25,7 +26,7 @@ initial begin :tester
 
 	bfm.Reset_VDIC();
 	
-	repeat(10000) begin
+	repeat(2000) begin
 	
 	cmd = get_cmd();
 	size = get_size();
@@ -41,195 +42,6 @@ initial begin :tester
 	
 	$finish;
 end :tester
-
-
-
-
-
-/*
-task Send2QueueRandom();
-	bit [7:0] data;
-	
-	size = $urandom_range(9, 2);
-	
-	size = 2;
-	for (int i=0; i<size; i++) begin
-		data = 8'($random);
-		data_i[i] = data;
-		wordsToSend.push_back({1'b0,data});
-	end
-
-endtask
-
-task TestCommandOnes(
-	input command_t cmd_c);
-	bit [15:0] expected;
-	bit [8:0] data;
-	begin
-		data = 9'h0FF;
-		cmd = cmd_c;
-		size = 2;
-		for (int i=0; i<size; i++) begin
-			data_i[i] = 8'hFF;
-			wordsToSend.push_back({1'b0,data_i[i]});
-		end
-		wordsToSend.push_back({1'b1,cmd_c[7:0]});
-		WriteInput();
-		ReadOutput_Status();
-		clk5_delay();
-		
-		end
-endtask
-
-task TestCommandZeros(
-	input command_t cmd_c);
-	bit [15:0] expected;
-	bit [8:0] data;
-	begin
-		data = 9'h000;
-		cmd = cmd_c;
-		size = 2;
-		for (int i=0; i<size; i++) begin
-			data_i[i] = 8'h00;
-			wordsToSend.push_back({1'b0,data_i[i]});
-		end
-
-		wordsToSend.push_back({1'b1,cmd_c[7:0]});
-		WriteInput();
-		ReadOutput_Status();
-		clk5_delay();
-		
-	if (stat || {data1_o,data2_o} != expected)
-		error_cnt = error_cnt + 1;
-	else
-		begin end
-	end
-endtask
-
-task TestAllCommands();
-	begin
-		test_started(1);
-		error_cnt = 0;
-		res = TEST_FAILED;
-		TestCommand(CMD_ADD);
-		TestCommand(CMD_AND);
-		TestCommand(CMD_OR);
-		TestCommand(CMD_XOR);
-		TestCommand(CMD_SUB);
-	end
-endtask
-
-task TestAllCommandsAfterReset();
-	begin
-		test_started(2);
-		error_cnt=0;
-		res = TEST_FAILED;
-		Reset_VDIC();
-		TestCommand(CMD_ADD);
-		Reset_VDIC();
-		TestCommand(CMD_AND);
-		Reset_VDIC();
-		TestCommand(CMD_OR);
-		Reset_VDIC();
-		TestCommand(CMD_XOR);
-		Reset_VDIC();
-		TestCommand(CMD_SUB);
-		Reset_VDIC();
-		TestCommand(CMD_NOP);
-		
-	if (error_cnt)
-		res = TEST_FAILED;
-	else
-		res = TEST_PASSED;
-	
-	print_test_result(res);
-		
-	end
-endtask
-
-task TestResetAfterEachCommand();
-	begin
-		test_started(3);
-		error_cnt=0;
-		res = TEST_FAILED;
-		
-		TestCommand(CMD_ADD);
-		Reset_VDIC();
-		TestCommand(CMD_AND);
-		Reset_VDIC();
-		TestCommand(CMD_OR);
-		Reset_VDIC();
-		TestCommand(CMD_XOR);
-		Reset_VDIC();
-		TestCommand(CMD_SUB);
-		Reset_VDIC();
-		TestCommand(CMD_NOP);
-		Reset_VDIC();
-		
-	if (error_cnt)
-		res = TEST_FAILED;
-	else
-		res = TEST_PASSED;
-	
-	print_test_result(res);
-		
-	end
-endtask
-
-task TestAllCommandsTwice();
-	begin
-		test_started(4);
-		error_cnt=0;
-		res = TEST_FAILED;
-		
-		TestCommand(CMD_ADD);
-		TestCommand(CMD_ADD);
-		TestCommand(CMD_AND);
-		TestCommand(CMD_AND);
-		
-	if (error_cnt)
-		res = TEST_FAILED;
-	else
-		res = TEST_PASSED;
-	
-	print_test_result(res);
-		
-	end
-endtask
-
-task TestAllZerosInput();
-	begin
-		test_started(5);
-		error_cnt=0;
-		res = TEST_FAILED;
-		
-		TestCommandZeros(CMD_ADD);
-		TestCommandZeros(CMD_AND);
-		TestCommandZeros(CMD_OR);
-		TestCommandZeros(CMD_XOR);
-		TestCommandZeros(CMD_SUB);
-		
-
-	end
-endtask
-
-task TestAllOnesInput();
-	begin
-		test_started(6);
-		error_cnt=0;
-		res = TEST_FAILED;
-		
-		TestCommandOnes(CMD_ADD);
-		TestCommandOnes(CMD_AND);
-		TestCommandOnes(CMD_OR);
-		TestCommandOnes(CMD_XOR);
-		TestCommandOnes(CMD_SUB);
-		
-
-		
-	end
-endtask	
-*/
 
 //---------------------------------
 // Random data generation functions
@@ -249,7 +61,7 @@ function command_t get_cmd();
 endfunction : get_cmd
 
 //---------------------------------
-function get_data(input [7:0] size);
+function void get_data(input [3:0] size);
 
     bit [1:0] zero_ones;
 
@@ -269,8 +81,7 @@ function get_data(input [7:0] size);
 endfunction : get_data
 //---------------------------------
 function logic[3:0] get_size();
-
-    return $urandom_range(9, 1);
+    return 4'($urandom_range(9, 1));
 endfunction : get_size
 
 

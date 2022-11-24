@@ -11,18 +11,20 @@ bit           		 clk;
 bit                  rst_n;
 bit                  enable_n;
 bit                  din;
-bit                  dout;
-bit          		 dout_valid;
+logic                dout;
+logic          		 dout_valid;
 	
+test_result_t tr;
 command_t cmd;
 status_t stat;
 test_result_t res;
 state_t STATE;
 bit [7:0]  data1_o, data2_o, error_cnt;
-bit [7:0] data_i [7:0], size;
+bit [7:0] data_i [7:0];
+bit [3:0] size;
 bit [8:0] wordsToSend[$];	
 	
-modport tlm (import Reset_VDIC, SendTest);
+modport tlm (import Reset_VDIC, SendTest, result_print);
 	
 //------------------------------------------------------------------------------
 // Clock generator
@@ -87,25 +89,8 @@ task SendToQueue();
 	wordsToSend.push_back({1'b1,cmd});
 	
 endtask
-/*
-task RndCmdRndData();
-	begin
-	
-		repeat(1000) begin
-			cmd = get_cmd();
-			size = get_size();
-			get_data();
-			SendToQueue();
-			WriteInput();
-			ReadOutput_Status();
-			clk5_delay();
-		
-		
-		end
-	end
-endtask*/
 
-task SendTest(input bit[7:0] idata_i[7:0], input command_t icmd, input bit [7:0] isize);
+task SendTest(input bit[7:0] idata_i[7:0], input command_t icmd, input bit [3:0] isize);
 	
 	cmd = icmd;
 	$cast(STATE, icmd);
@@ -119,29 +104,7 @@ task SendTest(input bit[7:0] idata_i[7:0], input command_t icmd, input bit [7:0]
 	ReadOutput_Status();
 	clk5_delay();
 endtask
-/*
-task TestCommand(
-	input command_t cmd_c);
-	bit [15:0] expected;
-	begin
-		cmd = cmd_c;
-		$cast(STATE,cmd);
-		Send2QueueRandom();
-		wordsToSend.push_back({1'b1,cmd_c[7:0]});
-		expected = get_expected();
-		WriteInput();
-		ReadOutput_Status();
-		$display("received status: %d", stat);
-		$display("expected result:%d received result: %d", expected, {data1_o,data2_o});
-		clk5_delay();
-		
-	if (stat || {data1_o,data2_o} != expected)
-		error_cnt = error_cnt + 1;
-	else
-		begin end
-	end
-endtask
-*/
+
 task ReadOutput_Status();
 	
 	bit [9:0] words [2:0];
@@ -169,6 +132,55 @@ task clk5_delay();
 		end
 	end
 endtask
+
+	
+//------------------------------------------------------------------------------
+// print the test result at the simulation end
+//------------------------------------------------------------------------------
+task result_print();
+    print_test_result(tr);
+endtask
+	
+//------------------------------------------------------------------------------
+// Other functions
+//------------------------------------------------------------------------------
+
+// used to modify the color of the text printed on the terminal
+function void set_print_color ( print_color_t c );
+    string ctl;
+    case(c)
+        COLOR_BOLD_BLACK_ON_GREEN : ctl  = "\033\[1;30m\033\[102m";
+        COLOR_BOLD_BLACK_ON_RED : ctl    = "\033\[1;30m\033\[101m";
+        COLOR_BOLD_BLACK_ON_YELLOW : ctl = "\033\[1;30m\033\[103m";
+        COLOR_BOLD_BLUE_ON_WHITE : ctl   = "\033\[1;34m\033\[107m";
+        COLOR_BLUE_ON_WHITE : ctl        = "\033\[0;34m\033\[107m";
+        COLOR_DEFAULT : ctl              = "\033\[0m\n";
+        default : begin
+            $error("set_print_color: bad argument");
+            ctl                          = "";
+        end
+    endcase
+    $write(ctl);
+endfunction
+
+function void print_test_result (test_result_t r);
+    if(r == TEST_PASSED) begin
+        set_print_color(COLOR_BOLD_BLACK_ON_GREEN);
+        $write ("-----------------------------------\n");
+        $write ("----------- Test PASSED -----------\n");
+        $write ("-----------------------------------");
+        set_print_color(COLOR_DEFAULT);
+        $write ("\n");
+    end
+    else begin
+        set_print_color(COLOR_BOLD_BLACK_ON_RED);
+        $write ("-----------------------------------\n");
+        $write ("----------- Test FAILED -----------\n");
+        $write ("-----------------------------------");
+        set_print_color(COLOR_DEFAULT);
+        $write ("\n");
+    end
+endfunction
 
 	
 endinterface 
