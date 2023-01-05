@@ -1,0 +1,10 @@
+1. What is the functional coverage of the class-based tester ?
+2. What is the functional coverage for the module-based tester?
+3. What is the code coverage for the DUT tested by the class-based tester?
+4. What is the code coverage for the DUT tested by the module-based tester?
+
+See in terminal
+
+5. Explain how it is possible, that two agents, which are the objects of the same class, get different configurations and use different BFMs
+
+they are declared separately in env.svh
