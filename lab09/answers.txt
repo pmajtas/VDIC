@@ -1,0 +1,9 @@
+A. List the three differences between the driver classes of Exercise 7 (using transactions) and the exemplary driver class (using sequences).
+
+Driver which uses sequences inherits from parametrized uvm_driver.
+In new driver there is no fifo, just sequencer_item_port.
+We begin one transaction during which we are sending sequences instead of few transactions.
+
+B. In the new UVM environment with a sequencer (env_h), which testbench elements should be modified when adding a new test? (We consider the testbench elements the env and the hierarchy below.)
+
+You don't have to change anything. You have to add new test_name in run_xrun and include it in _pkg
